@@ -1,0 +1,3639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derma Aura</title>
+    <link rel="icon" type="image/png" href="logo-modified.png">
+    <link rel="stylesheet" type="text/css" href="engine1/style.css" />
+    <script type="text/javascript" src="engine1/jquery.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Kings&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <style>
+        /* =============================================
+           BASE & RESET
+        ============================================= */
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        body {
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* =============================================
+           PROFESSIONAL ANIMATIONS
+        ============================================= */
+
+        /* --- Cursor glow trail --- */
+        .cursor-glow {
+            position: fixed;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232,28,255,0.55) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.08s ease, opacity 0.3s;
+            mix-blend-mode: screen;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(232,28,255,0.35);
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.18s ease, width 0.2s, height 0.2s;
+        }
+        @media (hover: none) {
+            .cursor-glow, .cursor-ring { display: none; }
+        }
+
+        /* --- Shimmer on section headings --- */
+        @keyframes shimmerText {
+            0%   { background-position: -200% center; }
+            100% { background-position:  200% center; }
+        }
+        .shimmer-heading {
+            background: linear-gradient(90deg,
+                rgba(179,51,179,1) 0%,
+                rgba(255,255,255,0.9) 40%,
+                rgba(245,69,242,1) 60%,
+                rgba(179,51,179,1) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmerText 4s linear infinite;
+            display: inline-block;
+        }
+
+        /* --- Card magnetic lift on hover --- */
+        .card {
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.35s ease !important;
+            will-change: transform;
+        }
+        .card:hover {
+            transform: translateY(-8px) scale(1.018) !important;
+            box-shadow: 0 22px 45px rgba(179,51,179,0.22),
+                        0 8px 20px rgba(0,0,0,0.12) !important;
+        }
+
+        /* --- Buy Now button pulse ring --- */
+        .btn-c {
+            position: relative;
+            overflow: visible !important;
+        }
+        .btn-c::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            border: 2px solid rgb(179,51,179);
+            opacity: 0;
+            animation: btnPulse 2.4s ease-out infinite;
+        }
+        @keyframes btnPulse {
+            0%   { transform: scale(1);   opacity: 0.7; }
+            70%  { transform: scale(1.18); opacity: 0;  }
+            100% { transform: scale(1.18); opacity: 0;  }
+        }
+
+        /* --- Section headings slide + underline draw --- */
+        h3.text-center {
+            position: relative;
+        }
+
+        /* --- Navbar link hover animated underline --- */
+        .navbar-nav .nav-link {
+            position: relative;
+        }
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 80%; height: 2px;
+            background: rgb(179,51,179);
+            border-radius: 2px;
+            transition: transform 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover::after { transform: translateX(-50%) scaleX(1); }
+
+        /* --- Scroll-reveal for cards (JS-driven class) --- */
+        .card-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .card-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Discount tag enhanced spin + glow --- */
+        .discount_tag {
+            animation: discountSpin 5s ease-in-out infinite !important;
+            filter: drop-shadow(0 0 6px rgba(232,28,255,0.5));
+        }
+        @keyframes discountSpin {
+            0%   { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 6px rgba(232,28,255,0.4)); }
+            25%  { transform: rotate(-8deg)  scale(1.08); filter: drop-shadow(0 0 12px rgba(232,28,255,0.7)); }
+            50%  { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 6px rgba(232,28,255,0.4)); }
+            75%  { transform: rotate(8deg)   scale(1.08); filter: drop-shadow(0 0 12px rgba(232,28,255,0.7)); }
+            100% { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 6px rgba(232,28,255,0.4)); }
+        }
+
+        /* --- Logo float in navbar --- */
+        .navbar-brand img {
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .navbar-brand:hover img {
+            transform: rotate(-8deg) scale(1.15);
+        }
+
+        /* --- Scroll progress bar at top --- */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #8a2a9b, #e81cff, #9353ed);
+            z-index: 99999;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px rgba(232,28,255,0.6);
+        }
+
+        /* --- Ambient glow orbs (background decoration) --- */
+        .aura-orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0.07;
+            animation: orbDrift ease-in-out infinite;
+        }
+        .aura-orb-1 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, #e81cff, transparent);
+            top: 10%; left: -10%;
+            animation-duration: 18s;
+        }
+        .aura-orb-2 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, #b333b3, transparent);
+            top: 50%; right: -8%;
+            animation-duration: 22s;
+            animation-delay: -7s;
+        }
+        .aura-orb-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, #9353ed, transparent);
+            bottom: 15%; left: 30%;
+            animation-duration: 16s;
+            animation-delay: -3s;
+        }
+        @keyframes orbDrift {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            33%       { transform: translateY(-30px) translateX(20px); }
+            66%       { transform: translateY(20px) translateX(-15px); }
+        }
+        @media (max-width: 768px) {
+            .aura-orb { opacity: 0.04; }
+        }
+
+        /* --- Product tag floating animation (in footer) --- */
+        .footer-product-tag:nth-child(odd)  { animation: tagBob 3.5s ease-in-out infinite; }
+        .footer-product-tag:nth-child(even) { animation: tagBob 3.5s ease-in-out infinite 0.7s; }
+        @keyframes tagBob {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-3px); }
+        }
+
+        /* =============================================
+           GLOBAL BRAND STYLES
+        ============================================= */
+        .aura-text-light {
+            color: rgb(18, 16, 18);
+            font-family: "Charm", cursive;
+            font-size: 50px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            text-decoration: underline;
+        }
+        .aura-bg-dark {
+            background-color: rgb(179, 51, 179);
+        }
+        .aura-p1 {
+            color: rgb(16, 16, 16);
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .aura-p2 {
+            font-family: 'Times New Roman', Times, serif;
+            color: #fff;
+            font-size: 16px;
+        }
+        .aura-p4 {
+            font-family: 'Times New Roman', Times, serif;
+        }
+        #adres {
+            font-family: "Charm", cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* =============================================
+           NAVBAR
+        ============================================= */
+        .navbar-nav .nav-link,
+        .navbar-nav .nav-item .nav-link {
+            font-family: "Charm", cursive !important;
+            font-size: 18px !important;
+            letter-spacing: 0.5px;
+        }
+        .navbar-nav .dropdown-menu {
+            min-width: 160px !important;
+            max-width: 200px !important;
+            padding: 6px 0 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 12px rgba(179,51,179,0.25) !important;
+        }
+        .navbar-nav .dropdown-menu .dropdown-item {
+            font-family: "Charm", cursive !important;
+            font-size: 15px !important;
+            padding: 5px 14px !important;
+        }
+        .navbar-nav .dropdown-menu .dropdown-item:hover {
+            background-color: rgb(179,51,179) !important;
+            color: #fff !important;
+        }
+        @media (max-width: 768px) {
+            .navbar-nav {
+                text-align: left;
+                padding-top: 10px;
+            }
+            .navbar-nav .nav-item {
+                margin-bottom: 8px;
+            }
+            .navbar-nav .nav-link,
+            .navbar-nav .nav-item .nav-link {
+                font-size: 16px !important;
+            }
+            .navbar-nav .dropdown-menu {
+                max-width: 100% !important;
+                min-width: 100% !important;
+            }
+        }
+
+        /* =============================================
+           HERO / TOP TITLE
+        ============================================= */
+        .top-title {
+            position: relative;
+        }
+        @keyframes fadeIn {
+            0%   { transform: translateY(0px); scale: 1; opacity: 0; }
+            50%  { transform: translateY(-30px); scale: 1.1; opacity: 1; }
+            100% { transform: translateY(0); scale: 1; opacity: 1; }
+        }
+        .img-top {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 100px;
+            animation: fadeIn 4s ease-in-out infinite;
+        }
+        .under-title {
+            margin-top: 10px;
+            display: block;
+            animation: titleFade 1.5s ease-in-out forwards;
+        }
+        @keyframes titleFade {
+            0%   { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =============================================
+           PRODUCT SECTION HEADINGS
+        ============================================= */
+        #pp, #serum, #creams, #sunscreen, #toner {
+            font-family: "Charm", cursive;
+            font-size: 30px;
+            background-color: rgb(179, 51, 179);
+            color: rgb(255, 255, 255);
+            text-shadow: 2px 2px 4px rgba(216,49,216,0.5);
+            border: 2px ridge rgba(10,9,10,0.3);
+            border-radius: 10px;
+            padding: 10px;
+            outline: 2px solid rgba(225,18,225,0.3);
+            outline-offset: 3px;
+        }
+        #pp:hover, #serum:hover, #creams:hover, #sunscreen:hover, #toner:hover {
+            background-color: rgb(255,255,255);
+            color: rgb(13,13,13);
+        }
+
+        /* Water drop orbit container */
+        .section-heading-wrap {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+        /* The drop itself */
+        .drop-orb {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 16px;
+            pointer-events: none;
+            z-index: 5;
+            animation: dropTravel 4s ease-in-out infinite;
+        }
+        /* SVG drop shape */
+        .drop-orb::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 16px;
+            background: radial-gradient(ellipse at 40% 35%,
+                rgba(255,255,255,0.9) 0%,
+                rgba(232,28,255,0.85) 45%,
+                rgba(150,20,180,0.7) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(180deg);
+            box-shadow:
+                0 0 8px rgba(232,28,255,0.8),
+                0 0 18px rgba(232,28,255,0.4);
+            filter: drop-shadow(0 0 4px rgba(232,28,255,0.9));
+        }
+        /* ripple ring that emits when drop lands */
+        .drop-orb::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(1);
+            width: 20px;
+            height: 6px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(232,28,255,0.6);
+            opacity: 0;
+            animation: dropRipple 4s ease-in-out infinite;
+        }
+        @keyframes dropTravel {
+            /*  starts left, flies right, vanishes, pauses, comes back  */
+            0%   { left: -18px;              opacity: 0;   transform: translateY(-50%) scale(0.7); }
+            5%   { opacity: 1;               transform: translateY(-50%) scale(1);   }
+            42%  { left: calc(100% + 4px);   opacity: 1;   transform: translateY(-50%) scale(1);   }
+            48%  { left: calc(100% + 14px);  opacity: 0;   transform: translateY(-50%) scale(0.5) scaleX(-1); }
+            /* pause — drop is "absorbed" */
+            52%  { left: calc(100% + 14px);  opacity: 0;   transform: translateY(-50%) scale(0.5) scaleX(-1); }
+            58%  { left: calc(100% + 4px);   opacity: 1;   transform: translateY(-50%) scale(1)   scaleX(-1); }
+            /* travel back */
+            93%  { left: -8px;               opacity: 1;   transform: translateY(-50%) scale(1)   scaleX(-1); }
+            100% { left: -18px;              opacity: 0;   transform: translateY(-50%) scale(0.7) scaleX(-1); }
+        }
+        @keyframes dropRipple {
+            0%, 38% { opacity: 0; width: 10px; }
+            44%      { opacity: 1; width: 24px; }
+            52%      { opacity: 0; width: 32px; }
+            100%     { opacity: 0; }
+        }
+        /* stagger each section heading */
+        .drop-orb-2 { animation-delay: 0.6s; }
+        .drop-orb-2::after { animation-delay: 0.6s; }
+        .drop-orb-3 { animation-delay: 1.2s; }
+        .drop-orb-3::after { animation-delay: 1.2s; }
+        .drop-orb-4 { animation-delay: 1.8s; }
+        .drop-orb-4::after { animation-delay: 1.8s; }
+        .drop-orb-5 { animation-delay: 2.4s; }
+        .drop-orb-5::after { animation-delay: 2.4s; }
+
+        /* Fix h3::after conflict */
+        h3.text-center { position: relative; }
+
+        /* override any ::after on the h3 wrapper since we use spans now */
+        .section-heading-wrap > h3::after { display: none !important; }
+
+        /* =============================================
+           CARD INFO DRAWER
+        ============================================= */
+        /* Make card a stacking context for the drawer */
+        .card { position: relative; overflow: visible !important; }
+
+        /* Toggle button — sits at top-center of card */
+        .drawer-toggle {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #b333b3, #e81cff);
+            border: 2px solid #fff;
+            box-shadow: 0 3px 12px rgba(232,28,255,0.45);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.3s ease,
+                        background 0.3s;
+        }
+        .drawer-toggle:hover {
+            box-shadow: 0 6px 20px rgba(232,28,255,0.65);
+            transform: translateX(-50%) scale(1.12);
+        }
+        .drawer-toggle svg {
+            width: 14px; height: 14px;
+            fill: #fff;
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            pointer-events: none;
+        }
+        .drawer-toggle.open svg { transform: rotate(180deg); }
+        .drawer-toggle.open {
+            background: linear-gradient(135deg, #e81cff, #b333b3);
+        }
+
+        /* Drawer panel */
+        .card-drawer {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(160deg, #1a001a 0%, #0d000d 100%);
+            border-radius: 0 0 12px 12px;
+            border-top: 2px solid rgba(232,28,255,0.35);
+            z-index: 15;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1),
+                        box-shadow 0.4s ease;
+            box-shadow: none;
+        }
+        .card-drawer.open {
+            max-height: 420px;
+            box-shadow: 0 -4px 30px rgba(232,28,255,0.18);
+        }
+        .card-drawer-inner {
+            padding: 18px 16px 16px;
+        }
+
+        /* Drawer product thumb */
+        .drawer-thumb {
+            width: 64px; height: 64px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 1.5px solid rgba(232,28,255,0.3);
+            background: rgba(255,255,255,0.04);
+            flex-shrink: 0;
+        }
+
+        /* Drawer title */
+        .drawer-title {
+            font-family: "Charm", cursive;
+            font-size: 15px;
+            color: #e81cff;
+            margin: 0 0 2px;
+            line-height: 1.3;
+        }
+
+        /* Skin type chips */
+        .drawer-skin-row {
+            display: flex; flex-wrap: wrap; gap: 5px;
+            margin-bottom: 10px;
+        }
+        .skin-chip {
+            font-family: 'Times New Roman', serif;
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid rgba(232,28,255,0.4);
+            background: rgba(232,28,255,0.1);
+            color: rgba(255,255,255,0.85);
+            white-space: nowrap;
+        }
+
+        /* Usage timing rows */
+        .drawer-timing {
+            display: flex; align-items: flex-start; gap: 8px;
+            margin-bottom: 7px;
+        }
+        .timing-icon {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: rgba(232,28,255,0.12);
+            border: 1px solid rgba(232,28,255,0.3);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 11px;
+            color: #e81cff;
+        }
+        .timing-text {
+            font-family: 'Times New Roman', serif;
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.5;
+        }
+        .timing-text b {
+            color: #e81cff;
+            font-weight: 600;
+        }
+
+        /* Drawer section label */
+        .drawer-label {
+            font-family: "Charm", cursive;
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .drawer-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .card-drawer.open { max-height: 480px; }
+            .drawer-thumb { width: 52px; height: 52px; }
+        }
+        .card-title {
+            font-family: "Charm", cursive;
+            font-size: 30px;
+            color: rgb(16,16,16);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            min-height: 60px;
+        }
+        .card-text {
+            font-family: 'Times New Roman', Times, serif;
+            color: rgb(16,16,16);
+            font-size: 16px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            min-height: 60px;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        .card-img-top {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .discount_tag {
+            position: absolute;
+            top: 2px;
+            right: -5px;
+            width: 100px;
+            height: auto;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            animation: pulse 4s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0%   { transform: scale(1); filter: brightness(100%); }
+            50%  { transform: scale(1.1); filter: brightness(120%); }
+            100% { transform: scale(1); filter: brightness(100%); }
+        }
+
+        /* 3D Card Effect */
+        :root { --card-height: 250px; --card-width: calc(var(--card-height) / 1.5); }
+        .card-3d {
+            width: var(--card-width);
+            height: var(--card-height);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 0 36px;
+            perspective: 2500px;
+            margin: 0 50px;
+        }
+        .wrapper {
+            transition: all 0.5s;
+            position: absolute;
+            width: 100%;
+            z-index: -1;
+        }
+        .card-3d:hover .wrapper {
+            transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+            box-shadow: 2px 35px 32px -8px rgba(0,0,0,0.75);
+        }
+        .wrapper::before, .wrapper::after {
+            content: ""; opacity: 0; width: 100%; height: 80px;
+            transition: all 0.5s; position: absolute; left: 0;
+        }
+        .wrapper::before {
+            top: 0; height: 100%;
+            background-image: linear-gradient(to top, transparent 46%, rgba(12,13,19,0.5) 68%, rgba(12,13,19) 97%);
+        }
+        .wrapper::after {
+            bottom: 0; opacity: 1;
+            background-image: linear-gradient(to bottom, transparent 46%, rgba(12,13,19,0.5) 68%, rgba(12,13,19) 97%);
+        }
+        .card-3d:hover .wrapper::before, .wrapper::after { opacity: 1; }
+        .card:hover .wrapper::after { height: 120px; }
+        .character {
+            width: 100%; opacity: 0; transition: all 0.5s;
+            position: absolute; z-index: -1;
+        }
+        .card-3d:hover .character {
+            opacity: 1;
+            transform: translate3d(0%, -30%, 100px);
+        }
+
+        /* =============================================
+           BUY NOW BUTTON
+        ============================================= */
+        .btn-c {
+            background-color: rgb(179,51,179);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 30px;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+        .btn-c:hover {
+            background-color: rgb(220,123,225);
+            color: white;
+            text-decoration: underline;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .hover-text:after {
+            content: "9.0$";
+            position: absolute;
+            font-size: 16px;
+            color: rgb(179,51,179);
+            opacity: 0;
+            margin-left: 10%;
+        }
+
+        /* =============================================
+           HEART LIKE BUTTON
+        ============================================= */
+        .ui-like {
+            --icon-size: 24px;
+            --icon-secondary-color: rgb(191,108,108);
+            --icon-hover-color: rgb(211,205,205);
+            --icon-primary-color: rgb(230,26,26);
+            --icon-circle-border: 1px solid var(--icon-primary-color);
+            --icon-circle-size: 35px;
+            --icon-anmt-duration: 0.3s;
+        }
+        .ui-like input { display: none; }
+        .ui-like .like {
+            width: var(--icon-size); height: auto;
+            fill: var(--icon-secondary-color); cursor: pointer;
+            transition: 0.2s; display: flex;
+            justify-content: center; align-items: center;
+            position: relative; transform-origin: top;
+            bottom: -4px; right: -100px;
+        }
+        .like::after {
+            content: ""; position: absolute;
+            width: 10px; height: 10px;
+            box-shadow: 0 30px 0 -4px var(--icon-primary-color), 30px 0 0 -4px var(--icon-primary-color),
+                0 -30px 0 -4px var(--icon-primary-color), -30px 0 0 -4px var(--icon-primary-color),
+                -22px 22px 0 -4px var(--icon-primary-color), -22px -22px 0 -4px var(--icon-primary-color),
+                22px -22px 0 -4px var(--icon-primary-color), 22px 22px 0 -4px var(--icon-primary-color);
+            border-radius: 50%; transform: scale(0);
+        }
+        .like::before {
+            content: ""; position: absolute; border-radius: 50%;
+            border: var(--icon-circle-border); opacity: 0;
+        }
+        .ui-like:hover .like { fill: var(--icon-hover-color); }
+        .ui-like input:checked + .like { fill: var(--icon-primary-color); }
+        @keyframes like { 50% { transform: scaleY(0.6); } 100% { transform: scaleY(1); } }
+        @keyframes circle {
+            from { width: 0; height: 0; opacity: 0; }
+            90% { width: var(--icon-circle-size); height: var(--icon-circle-size); opacity: 1; }
+            to { opacity: 0; }
+        }
+        @keyframes circles {
+            from { transform: scale(0); }
+            40% { opacity: 1; }
+            to { transform: scale(0.8); opacity: 0; }
+        }
+
+        /* =============================================
+           ABOUT US SECTION
+        ============================================= */
+        .container-4 {
+            position: relative;
+            padding: 20px;
+        }
+        .container-4 > img {
+            float: left;
+            clip-path: circle(40%);
+            shape-outside: circle(45%);
+        }
+        #about-us {
+            font-family: "Charm", cursive;
+            font-size: 30px;
+            color: rgb(16,16,16);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        /* =============================================
+           CONTACT / MAP SECTION
+        ============================================= */
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            display: block;
+        }
+        .map-pin {
+            position: absolute;
+            left:45%;
+            top: 70%;
+            transform: translate(-50%, -100%);
+            width: 48px !important;
+            z-index: 10;
+            pointer-events: none;
+            animation: mapPinFloat 3s ease-in-out infinite;
+        }
+        @keyframes mapPinFloat {
+            0%   { transform: translate(-50%, -100%); }
+            50%  { transform: translate(-50%, calc(-100% - 12px)); }
+            100% { transform: translate(-50%, -100%); }
+        }
+        @media (max-width: 768px) {
+            .map-pin { width: 39px !important;
+            
+            display:none;
+        
+        
+        }
+        }
+        #map-iframe {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            width: 100%;
+            height: 350px;
+            display: block;
+        }
+        @keyframes float {
+            0%   { transform: translateY(0px); scale: 1; opacity: 0; }
+            50%  { transform: translateY(-30px); scale: 1.1; opacity: 1; }
+            100% { transform: translateY(0px); scale: 1; opacity: 1; }
+        }
+        .line-image-5 {
+            width: 70px;
+            height: auto;
+            animation: float 4s ease-in-out infinite;
+        }
+        dd:hover {
+            color: rgb(238,155,238);
+            text-shadow: 2px 2px 4px rgba(216,49,216,0.5);
+            font-size: 18px;
+        }
+
+        /* =============================================
+           SCROLL TO TOP BUTTON
+        ============================================= */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            background-color: #e81cff;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        #scrollToTopBtn:hover {
+            background-color: #efcdfa;
+            color: #d473c4;
+            transform: translateY(-5px);
+        }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+        footer {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .footer-main {
+            background: linear-gradient(180deg, #1a001a 0%, #0d000d 100%);
+            margin: 0;
+            padding: 0;
+            border-top: 3px solid;
+            border-image: linear-gradient(90deg, #8a2a9b, #f545f2, #9353ed) 1;
+        }
+        /* Top wave divider */
+        .footer-wave {
+            display: block;
+            width: 100%;
+            line-height: 0;
+        }
+        /* Newsletter strip */
+        .footer-newsletter {
+            background: linear-gradient(90deg, rgba(138,42,155,0.25), rgba(232,28,255,0.15), rgba(138,42,155,0.25));
+            border-top: 1px solid rgba(232,28,255,0.2);
+            border-bottom: 1px solid rgba(232,28,255,0.2);
+            padding: 18px 0;
+        }
+        .footer-newsletter h5 {
+            font-family: "Charm", cursive;
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        .footer-newsletter p {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+        .newsletter-form {
+            display: flex;
+            gap: 0;
+            max-width: 420px;
+            width: 100%;
+        }
+        .newsletter-form input {
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(232,28,255,0.35);
+            border-right: none;
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 30px 0 0 30px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
+        .newsletter-form input:focus { border-color: #e81cff; }
+        .newsletter-form button {
+            background: linear-gradient(135deg, #b333b3, #e81cff);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 0 30px 30px 0;
+            font-family: "Charm", cursive;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .newsletter-form button:hover {
+            background: linear-gradient(135deg, #e81cff, #b333b3);
+            box-shadow: 0 0 15px rgba(232,28,255,0.5);
+        }
+        /* Main footer grid */
+        .footer-grid {
+            padding: 32px 0 18px;
+        }
+        .footer-col-title {
+            font-family: "Charm", cursive;
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 12px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .footer-col-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 40px; height: 2px;
+            background: linear-gradient(90deg, #e81cff, transparent);
+            border-radius: 2px;
+        }
+        /* Brand column */
+        .footer-brand-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid rgba(232,28,255,0.4);
+            margin-bottom: 14px;
+        }
+        .footer-brand-name {
+            font-family: "Charm", cursive;
+            font-size: 26px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(232,28,255,0.4);
+            margin-bottom: 10px;
+        }
+        .footer-brand-desc {
+            color: rgba(255,255,255,0.55);
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 220px;
+        }
+        /* Rating stars */
+        .footer-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+        }
+        .footer-rating .stars { color: #f5c542; font-size: 14px; letter-spacing: 2px; }
+        .footer-rating span { color: rgba(255,255,255,0.5); font-size: 12px; }
+        /* Quick links */
+        .footer-links {
+            list-style: none;
+            padding: 0; margin: 0;
+        }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        .footer-links li a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 14px;
+            font-family: 'Times New Roman', serif;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-links li a::before {
+            content: '›';
+            color: #e81cff;
+            font-size: 18px;
+            line-height: 1;
+            transition: transform 0.25s;
+        }
+        .footer-links li a:hover {
+            color: #fff;
+            padding-left: 4px;
+        }
+        .footer-links li a:hover::before { transform: translateX(3px); }
+        /* Products column */
+        .footer-products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .footer-product-tag {
+            background: rgba(179,51,179,0.15);
+            border: 1px solid rgba(179,51,179,0.3);
+            color: rgba(255,255,255,0.7);
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            transition: all 0.25s;
+            cursor: default;
+        }
+        .footer-product-tag:hover {
+            background: rgba(232,28,255,0.2);
+            border-color: #e81cff;
+            color: #fff;
+        }
+        /* Contact column */
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+            color: rgba(255,255,255,0.65);
+            font-size: 13px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.5;
+        }
+        .footer-contact-item .fc-icon {
+            width: 32px; height: 32px;
+            background: rgba(232,28,255,0.12);
+            border: 1px solid rgba(232,28,255,0.25);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #e81cff;
+            font-size: 13px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        .footer-contact-item:hover .fc-icon {
+            background: rgba(232,28,255,0.25);
+            box-shadow: 0 0 10px rgba(232,28,255,0.3);
+        }
+        .footer-contact-item:hover { color: #fff; }
+        /* Social icons */
+        .footer-socials {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .footer-social-btn {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgba(232,28,255,0.3);
+            background: rgba(255,255,255,0.04);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .footer-social-btn:hover {
+            background: #e81cff;
+            border-color: #e81cff;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(232,28,255,0.4);
+        }
+        /* Divider */
+        .footer-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            margin: 0;
+        }
+        /* Bottom bar */
+        .footer-bottom {
+            padding: 12px 0;
+        }
+        .footer-copy {
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+        }
+        .footer-copy span { color: #e81cff; }
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            padding: 0; margin: 0;
+            flex-wrap: wrap;
+        }
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 12px;
+            font-family: 'Times New Roman', serif;
+            transition: color 0.2s;
+        }
+        .footer-bottom-links a:hover { color: #e81cff; }
+        /* Badges */
+        .footer-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .footer-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 5px 12px;
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            font-family: 'Times New Roman', serif;
+        }
+        .footer-badge i { color: #e81cff; font-size: 12px; }
+        /* Animated social icons */
+        .footer-socials-wrap {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .footer-social-animated {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 52px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.65);
+            transition: color 0.3s;
+        }
+        .footer-social-animated i {
+            font-size: 20px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(232,28,255,0.3);
+            background: rgba(255,255,255,0.04);
+            position: relative;
+            z-index: 1;
+            transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            animation: socialFloat 3s ease-in-out infinite;
+        }
+        .footer-social-animated:nth-child(1) i { animation-delay: 0s; }
+        .footer-social-animated:nth-child(2) i { animation-delay: 0.3s; }
+        .footer-social-animated:nth-child(3) i { animation-delay: 0.6s; }
+        .footer-social-animated:nth-child(4) i { animation-delay: 0.9s; }
+        .footer-social-animated:nth-child(5) i { animation-delay: 1.2s; }
+        @keyframes socialFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-6px); }
+        }
+        .footer-social-animated .fsa-label {
+            font-size: 10px;
+            font-family: 'Times New Roman', serif;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.25s;
+            white-space: nowrap;
+            color: #e81cff;
+        }
+        .footer-social-animated .fsa-glow {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232,28,255,0.5) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            filter: blur(6px);
+        }
+        .footer-social-animated:hover i {
+            background: linear-gradient(135deg, #b333b3, #e81cff);
+            border-color: #e81cff;
+            color: #fff;
+            transform: translateY(-8px) scale(1.15);
+            box-shadow: 0 10px 25px rgba(232,28,255,0.5);
+            animation: none;
+        }
+        .footer-social-animated:hover .fsa-glow { opacity: 1; }
+        .footer-social-animated:hover .fsa-label { opacity: 1; transform: translateY(0); }
+        .footer-social-animated:hover { color: #fff; }
+
+        /* Floating particles */
+        .footer-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .footer-main { position: relative; }
+        .fp {
+            position: absolute;
+            color: rgba(232,28,255,0.18);
+            font-size: 14px;
+            animation: fpFloat linear infinite;
+            user-select: none;
+        }
+        .fp1  { left: 5%;  top: 20%; font-size: 10px; animation-duration: 8s;  animation-delay: 0s; }
+        .fp2  { left: 15%; top: 60%; font-size: 16px; animation-duration: 11s; animation-delay: 1s; }
+        .fp3  { left: 28%; top: 35%; font-size: 8px;  animation-duration: 9s;  animation-delay: 2s; }
+        .fp4  { left: 45%; top: 70%; font-size: 12px; animation-duration: 13s; animation-delay: 0.5s; }
+        .fp5  { left: 60%; top: 15%; font-size: 14px; animation-duration: 10s; animation-delay: 3s; }
+        .fp6  { left: 75%; top: 55%; font-size: 9px;  animation-duration: 12s; animation-delay: 1.5s; }
+        .fp7  { left: 88%; top: 30%; font-size: 13px; animation-duration: 7s;  animation-delay: 2.5s; }
+        .fp8  { left: 95%; top: 75%; font-size: 11px; animation-duration: 14s; animation-delay: 4s; }
+        @keyframes fpFloat {
+            0%   { transform: translateY(0px)   rotate(0deg);   opacity: 0.15; }
+            50%  { transform: translateY(-18px) rotate(180deg); opacity: 0.35; }
+            100% { transform: translateY(0px)   rotate(360deg); opacity: 0.15; }
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid { padding: 24px 0 14px; }
+            .footer-col-title { font-size: 17px; }
+            .footer-bottom { text-align: center; }
+            .footer-bottom-links { justify-content: center; margin-top: 8px; }
+            .footer-newsletter .d-flex { flex-direction: column; align-items: flex-start; gap: 14px; }
+            .newsletter-form { max-width: 100%; }
+            .footer-socials-wrap { gap: 10px; }
+        }
+
+        /* =============================================
+           SIGN IN MODAL
+        ============================================= */
+        .signin-checkbox { display: none; }
+        .signin-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .signin-modal-overlay .signin-modal-content {
+            transform: scale(0.85);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .signin-checkbox:checked + .signin-modal-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .signin-checkbox:checked + .signin-modal-overlay .signin-modal-content {
+            transform: scale(1);
+        }
+        .signin-modal-overlay .signin-modal-content.card {
+            position: relative;
+            width: 92%;
+            max-width: 400px;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 30px;
+            border-radius: 12px;
+            cursor: default;
+            box-sizing: border-box;
+            direction: ltr;
+            min-height: 450px;
+            height: auto;
+            justify-content: flex-start;
+            overflow: visible;
+        }
+        .signin-modal-overlay .signin-modal-content.card::before {
+            content: '';
+            position: absolute;
+            inset: 0; top: -4px; left: -4px;
+            margin: auto;
+            width: calc(100% + 8px); height: calc(100% + 8px);
+            border-radius: 14px;
+            background: linear-gradient(-45deg,#b333b3 0%, #d0d3d4 100%);
+            z-index: -10;
+            pointer-events: none;
+        }
+        .signin-modal-overlay .signin-modal-content.card::after {
+            content: "";
+            z-index: -1;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(-45deg, #fc00ff 0%, #dee5e5 100%);
+            transform: translate3d(0, 0, 0) scale(0.98);
+            filter: blur(25px);
+        }
+        .signin-close-btn {
+            position: absolute;
+            top: 8px; right: 20px;
+            color: #ede8e8;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .signin-close-btn:hover {
+            color: #e81cff;
+            transform: rotate(90deg);
+        }
+        .signin-modal-content .form-label {
+            font-size: 13px; font-weight: 700;
+            color: #e81cff; text-transform: uppercase;
+            letter-spacing: 0.8px; text-align: left;
+        }
+        .signin-modal-content .form-control {
+            background-color: #121212 !important;
+            border: 1px solid #333333 !important;
+            color: #ffffff !important;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .signin-modal-content .form-control:focus {
+            border-color: #9451ca !important;
+            background-color: #080808 !important;
+            box-shadow: 0 0 0 4px rgba(64,201,255,0.15) !important;
+        }
+
+        /* =============================================
+           BUY NOW MODAL
+        ============================================= */
+        .buy-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .buy-modal-overlay .buy-modal-content {
+            transform: scale(0.85);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .buy-checkbox:checked + .buy-modal-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .buy-checkbox:checked + .buy-modal-overlay .buy-modal-content {
+            transform: scale(1);
+        }
+        .buy-modal-overlay .buy-modal-content.card {
+            position: relative;
+            width: 92%;
+            max-width: 400px;
+            background-color: #000000 !important;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 30px;
+            border-radius: 12px;
+            cursor: default;
+            box-sizing: border-box;
+            direction: ltr;
+            min-height: 450px;
+            height: auto;
+            justify-content: flex-start;
+            overflow: visible;
+        }
+        @media (max-width: 480px) {
+            .buy-modal-overlay .buy-modal-content.card {
+                width: 92% !important;
+                max-width: 400px !important;
+                padding: 28px 20px !important;
+                min-height: unset !important;
+            }
+            .buy-heading {
+                font-size: 20px !important;
+            }
+            .buy-modal-overlay .buy-modal-content.card lord-icon {
+                width: 40px !important;
+                height: 40px !important;
+            }
+        }
+        .buy-modal-overlay .buy-modal-content.card::before {
+            content: '';
+            position: absolute;
+            inset: 0; top: -4px; left: -4px;
+            margin: auto;
+            width: calc(100% + 8px); height: calc(100% + 8px);
+            border-radius: 14px;
+            background: linear-gradient(-45deg,#b333b3 0%, #d0d3d4 100%);
+            z-index: -10;
+            pointer-events: none;
+        }
+        .buy-modal-overlay .buy-modal-content.card::after {
+            content: "";
+            z-index: -1;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(-45deg, #fc00ff 0%, #dee5e5 100%);
+            transform: translate3d(0, 0, 0) scale(0.98);
+            filter: blur(25px);
+        }
+        .buy-close-btn {
+            position: absolute;
+            top: 8px; right: 20px;
+            color: #ede8e8;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .buy-heading {
+            font-family: "Charm", cursive;
+            color: #e81cff;
+            font-size: 24px;
+        }
+        .custom-input {
+            background-color: #121212;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .custom-input:focus {
+            border-color: #e81cff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(232,28,255,0.2);
+        }
+        .buy-submit-btn {
+            background: linear-gradient(135deg, rgb(179,51,179), #e81cff);
+            color: #fff;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-family: "Charm", cursive;
+            font-size: 18px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232,28,255,0.4);
+            width: 100%;
+        }
+        .buy-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232,28,255,0.6);
+        }
+        .buy-form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #e81cff;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+        .buy-input {
+            width: 100%;
+            background-color: #121212 !important;
+            border: 1px solid #333333 !important;
+            color: #ffffff !important;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            outline: none;
+            display: block;
+        }
+        .buy-input:focus {
+            border-color: #9451ca !important;
+            background-color: #080808 !important;
+            box-shadow: 0 0 0 4px rgba(64,201,255,0.15) !important;
+        }
+
+        /* =============================================
+           FORM CONTAINER (SHARED)
+        ============================================= */
+        .form-container {
+            box-sizing: border-box;
+            font-family: "Charm", cursive;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgb(255,255,255);
+            text-align: center;
+            max-width: 400px;
+            height: auto;
+            overflow: visible;
+        }
+        h2 {
+            font-family: "Charm", cursive;
+            font-size: 30px;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+        /* Headings inside modals and forms match brand */
+        .buy-heading, .signin-modal-content h2, .form-container h2 {
+            font-family: "Charm", cursive !important;
+            letter-spacing: 1px;
+        }
+        .input-box { position: relative; }
+        .input-box input {
+            width: 100%;
+            padding: 12px;
+            border-bottom: 2px solid rgb(179,51,179);
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 4px;
+            padding: 5px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .btn-outline-light-s {
+            background-color: rgb(179,51,179);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.4s;
+            display: inline-block;
+        }
+        .btn-outline-light-s:hover {
+            background-color: rgb(220,123,225);
+            color: white;
+            text-decoration: underline;
+            transform: translateY(-2px);
+        }
+
+        /* =============================================
+           SOCIAL ICONS
+        ============================================= */
+        .example-2 { display: flex; justify-content: center; align-items: center; }
+        .example-2 .icon-content { margin: 0 10px; position: relative; }
+        .example-2 .icon-content a {
+            position: relative; overflow: hidden; display: flex;
+            justify-content: center; align-items: center;
+            width: 50px; height: 50px; border-radius: 50%;
+            color: #4d4d4d; background-color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+        .example-2 .icon-content a svg { position: relative; z-index: 1; width: 30px; height: 30px; }
+        .example-2 .icon-content a:hover { color: white; }
+        .example-2 .icon-content a .filled {
+            position: absolute; top: auto; bottom: 0; left: 0;
+            width: 100%; height: 0; background-color: #000;
+            transition: all 0.3s ease-in-out;
+        }
+        .example-2 .icon-content a:hover .filled { height: 100%; }
+
+        /* =============================================
+           ====  INSTRUCTIONS SECTION  ====
+        ============================================= */
+        /* Section separator */
+        .instructions-divider {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, rgba(138,42,155,1) 7%, rgba(245,69,242,1) 50%, rgba(147,83,237,1) 100%);
+        }
+
+        /* Full-width instruction heading */
+        .instruction-8 {
+            font-family: "Charm", cursive;
+            font-size: 40px;
+            color: rgb(16,16,16);
+            text-shadow: 2px 2px 4px rgba(152,51,142,0.5);
+            text-decoration: underline;
+            background: #8a2a9b;
+            background: linear-gradient(90deg, rgba(138,42,155,1) 7%, rgba(245,69,242,1) 50%, rgba(147,83,237,1) 100%);
+            border-radius: 10px;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            width: 100%;
+            box-sizing: border-box;
+            display: block;
+            text-align: center;
+            color: #fff;
+        }
+
+        /* Skin type cards container */
+        .skin-cards-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            padding: 20px 0;
+        }
+        .skin-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            height: 100px;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: 400ms;
+        }
+        .skin-card p.tip    { font-size: 1em;  font-weight: 700; margin: 0; }
+        .skin-card p.second-text { font-size: .7em; margin: 0; }
+        .skin-card:hover    { transform: scale(1.05); }
+        .skin-cards-wrapper:hover > .skin-card:not(:hover) { filter: blur(8px); transform: scale(0.95); }
+
+        .skin-c1 { background-color: #660066; }
+        .skin-c2 { background-color: #800080; }
+        .skin-c3 { background-color: #990099; }
+        .skin-c4 { background-color: #b300b3; }
+        .skin-c5 { background-color: #cc00cc; }
+
+        /* Instruction image */
+        .instruct-img-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .instruct-img-wrapper img {
+            max-width: 420px;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(179,51,179,0.3);
+        }
+
+        /* Steps list */
+        .instruct-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-width: 700px;
+            width: 100%;
+        }
+        .instruct-steps li {
+            padding: 12px 16px;
+            font-size: 18px;
+            color: #111;
+            font-family: 'Times New Roman', Times, serif;
+            border-left: 4px solid rgb(179,51,179);
+            margin-bottom: 10px;
+            background: rgba(179,51,179,0.07);
+            border-radius: 0 8px 8px 0;
+            text-shadow: none;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s;
+        }
+        .instruct-steps li.step-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .instruct-steps li:hover {
+            background: rgba(179,51,179,0.18);
+            border-left-width: 6px;
+            transform: translateX(4px);
+        }
+        .instruct-steps li b { color: rgb(140,0,140); }
+
+        /* =============================================
+           CONTACT INFO ANIMATION (in About Us)
+        ============================================= */
+        .contact-info-wrap {
+            width: 100%;
+        }
+        .contact-dl {
+            margin: 0;
+            padding: 0;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            border-left: 3px solid rgba(255,255,255,0.4);
+            margin-bottom: 10px !important;
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.55s ease, transform 0.55s ease, background 0.3s, border-color 0.3s;
+            transition-delay: var(--delay, 0s);
+            cursor: default;
+        }
+        .contact-item.contact-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .contact-item:hover {
+            background: rgba(255,255,255,0.18);
+            border-left-color: #fff;
+            color: rgb(238,155,238) !important;
+            text-shadow: 2px 2px 4px rgba(216,49,216,0.5);
+            font-size: 18px;
+            padding-left: 22px;
+        }
+        .contact-icon {
+            font-size: 18px;
+            width: 22px;
+            text-align: center;
+            flex-shrink: 0;
+            animation: iconPulse 2.5s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.8; }
+        }
+
+        /* Medical notice footer for instructions */
+        .footer-instructions {
+            background-color: #b333b3;
+            color: azure;
+            text-align: center;
+            padding: 20px;
+        }
+        .footer-instructions p {
+            margin: 0;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 15px;
+            color: azure;
+            text-shadow: none;
+        }
+
+        /* =============================================
+           MOBILE RESPONSIVE
+        ============================================= */
+        @media (max-width: 991px) {
+            .container, .container-fluid {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+            .row {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+        }
+        @media (max-width: 768px) {
+            .aura-text-light { font-size: 1.8rem !important; }
+            h2 { font-size: 1.4rem !important; }
+            h3 { font-size: 1.2rem !important; }
+            p, li { font-size: 15px !important; line-height: 1.8 !important; }
+            .img-top { visibility: hidden; }
+            #map-iframe { height: 240px !important; }
+            .line-image-5 { position: static !important; width: 50px; }
+            .card-3d { max-width: 100% !important; margin: 0 auto !important; }
+            .container-4 > img {
+                float: none;
+                display: block;
+                margin: 0 auto 16px;
+                clip-path: circle(40%);
+            }
+            .instruct-img-wrapper img { max-width: 280px; }
+            .skin-card { max-width: 100%; }
+            .instruction-8 { font-size: 1.5rem !important; padding: 10px 12px; }
+        }
+        @media (max-width: 480px) {
+            .aura-text-light { font-size: 1.5rem !important; }
+            p { font-size: 14px !important; }
+            section { padding-left: 12px !important; padding-right: 12px !important; }
+            .instruct-steps li { font-size: 15px !important; }
+        }
+
+        /* =============================================
+           WISHLIST FLOATING BUTTON
+        ============================================= */
+        #wishlist-fab {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9999;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #b333b3, #e81cff);
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 24px rgba(232,28,255,0.45);
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+        }
+        #wishlist-fab:hover {
+            transform: scale(1.13);
+            box-shadow: 0 10px 32px rgba(232,28,255,0.65);
+        }
+        #wishlist-fab svg {
+            width: 24px; height: 24px;
+            fill: #fff;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        #wishlist-fab:hover svg { transform: scale(1.2) rotate(-8deg); }
+        /* Badge counter */
+        #wishlist-count {
+            position: absolute;
+            top: -4px; right: -4px;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            color: #b333b3;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.3s, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        #wishlist-count.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        /* Pulse ring on FAB */
+        #wishlist-fab::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(232,28,255,0.6);
+            opacity: 0;
+            animation: wishFabPulse 2.6s ease-out infinite;
+        }
+        @keyframes wishFabPulse {
+            0%   { transform: scale(1);   opacity: 0.7; }
+            70%  { transform: scale(1.5); opacity: 0;   }
+            100% { transform: scale(1.5); opacity: 0;   }
+        }
+
+        /* =============================================
+           WISHLIST DRAWER PANEL
+        ============================================= */
+        #wishlist-panel {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 360px;
+            max-width: 96vw;
+            max-height: 80vh;
+            background: linear-gradient(160deg, #1a001a 0%, #0d000d 100%);
+            border-top: 2px solid rgba(232,28,255,0.4);
+            border-right: 2px solid rgba(232,28,255,0.2);
+            border-radius: 0 20px 0 0;
+            z-index: 9998;
+            transform: translateY(110%);
+            transition: transform 0.5s cubic-bezier(0.34,1.22,0.64,1);
+            display: flex; flex-direction: column;
+            box-shadow: 6px -6px 40px rgba(232,28,255,0.18);
+        }
+        #wishlist-panel.open {
+            transform: translateY(0%);
+        }
+        /* Panel header */
+        .wishlist-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid rgba(232,28,255,0.18);
+            flex-shrink: 0;
+        }
+        .wishlist-header h4 {
+            font-family: "Charm", cursive;
+            color: #e81cff;
+            font-size: 22px;
+            margin: 0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .wishlist-header h4 svg { width: 20px; height: 20px; fill: #e81cff; }
+        .wishlist-close-btn {
+            background: none; border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 22px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.3s;
+            line-height: 1;
+            padding: 0;
+        }
+        .wishlist-close-btn:hover { color: #e81cff; transform: rotate(90deg); }
+
+        /* Items list */
+        #wishlist-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(232,28,255,0.3) transparent;
+        }
+        #wishlist-items::-webkit-scrollbar { width: 4px; }
+        #wishlist-items::-webkit-scrollbar-thumb { background: rgba(232,28,255,0.3); border-radius: 4px; }
+
+        /* Empty state */
+        .wishlist-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255,255,255,0.35);
+            font-family: 'Times New Roman', serif;
+            font-size: 15px;
+        }
+        .wishlist-empty svg { width: 48px; height: 48px; fill: rgba(232,28,255,0.2); display: block; margin: 0 auto 12px; }
+
+        /* Single wishlist item */
+        .wishlist-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(232,28,255,0.12);
+            margin-bottom: 10px;
+            animation: wishItemIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        @keyframes wishItemIn {
+            from { opacity: 0; transform: translateX(-30px) scale(0.9); }
+            to   { opacity: 1; transform: translateX(0)     scale(1);   }
+        }
+        @keyframes wishItemOut {
+            to   { opacity: 0; transform: translateX(-30px) scale(0.85); max-height: 0; margin-bottom: 0; padding: 0; }
+        }
+        .wishlist-item.removing {
+            animation: wishItemOut 0.35s ease forwards;
+        }
+        .wishlist-item img {
+            width: 52px; height: 52px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid rgba(232,28,255,0.2);
+            background: rgba(255,255,255,0.04);
+            flex-shrink: 0;
+        }
+        .wishlist-item-info { flex: 1; min-width: 0; }
+        .wishlist-item-name {
+            font-family: "Charm", cursive;
+            font-size: 14px;
+            color: #e8e8e8;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            margin: 0 0 3px;
+        }
+        .wishlist-item-section {
+            font-family: 'Times New Roman', serif;
+            font-size: 11px;
+            color: rgba(232,28,255,0.65);
+        }
+        .wishlist-remove-btn {
+            background: none; border: none;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s, transform 0.3s;
+            flex-shrink: 0;
+            font-size: 16px;
+            line-height: 1;
+        }
+        .wishlist-remove-btn:hover { color: #e81cff; transform: scale(1.2); }
+
+        /* Panel footer */
+        .wishlist-footer {
+            padding: 14px 20px;
+            border-top: 1px solid rgba(232,28,255,0.12);
+            flex-shrink: 0;
+        }
+        .wishlist-clear-btn {
+            width: 100%;
+            background: rgba(232,28,255,0.1);
+            border: 1px solid rgba(232,28,255,0.3);
+            color: #e81cff;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: "Charm", cursive;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .wishlist-clear-btn:hover {
+            background: rgba(232,28,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Heart burst animation when adding to wishlist */
+        @keyframes heartBurst {
+            0%   { transform: scale(1);   }
+            30%  { transform: scale(1.5); }
+            60%  { transform: scale(0.9); }
+            100% { transform: scale(1);   }
+        }
+        .ui-like input:checked + .like {
+            animation: heartBurst 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+
+        /* Floating heart particles */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            font-size: 14px;
+            animation: heartFloat 0.9s ease-out forwards;
+        }
+        @keyframes heartFloat {
+            0%   { opacity: 1; transform: translateY(0)   scale(1);   }
+            100% { opacity: 0; transform: translateY(-70px) scale(0.5); }
+        }
+
+        @media (max-width: 480px) {
+            #wishlist-panel { width: 98vw; }
+            #wishlist-fab   { bottom: 20px; left: 16px; width: 48px; height: 48px; }
+        }
+
+        /* =============================================
+           CUSTOM OVERRIDES (requested polish)
+        ============================================= */
+
+        /* Drawer toggle becomes a text pill, not just an arrow */
+        .drawer-toggle {
+            width: auto !important;
+            height: auto !important;
+            min-height: 28px;
+            padding: 6px 16px !important;
+            border-radius: 999px !important;
+            font-family: "Charm", cursive;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            gap: 6px;
+            top: -16px !important;
+        }
+        .drawer-toggle::before {
+            content: "Usage Guide";
+            display: inline-block;
+        }
+        .drawer-toggle.open::before {
+            content: "Hide Guide";
+        }
+        .drawer-toggle svg {
+            width: 11px !important;
+            height: 11px !important;
+        }
+
+        /* Card drawer: soft light grey to blend with card */
+        .card-drawer {
+            background: linear-gradient(160deg,
+                rgba(232,234,238,0.96) 0%,
+                rgba(215,218,225,0.94) 100%) !important;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 2px solid rgba(179,51,179,0.28) !important;
+            border-radius: 0 0 14px 14px !important;
+            color: #2a1a30 !important;
+        }
+        .card-drawer * { color: #2a1a30; }
+        .card-drawer .drawer-label { color: rgba(50,30,60,0.65) !important; }
+        .card-drawer .timing-text  { color: rgba(40,10,50,0.88) !important; }
+        .card-drawer .timing-text b { color: #a01ea7 !important; }
+        .card-drawer .skin-chip {
+            background: rgba(179,51,179,0.12) !important;
+            color: #5a1b5e !important;
+            border-color: rgba(179,51,179,0.35) !important;
+        }
+        .card-drawer .drawer-thumb {
+            background: rgba(255,255,255,0.7) !important;
+            border-color: rgba(179,51,179,0.30) !important;
+        }
+        .card-drawer .drawer-divider { border-top-color: rgba(0,0,0,0.10) !important; }
+
+        /* Sign In modal: match Buy Now (white/light) */
+        .signin-modal-overlay .signin-modal-content.card {
+            background-color: #ffffff !important;
+        }
+        .signin-modal-overlay .signin-modal-content h2 { color: #a01ea7 !important; text-shadow: none !important; }
+        .signin-modal-overlay .form-label,
+        .signin-modal-content .form-label { color: #6b1f6f !important; }
+        .signin-modal-content .form-control {
+            background-color: #f7f0fb !important;
+            color: #1a001a !important;
+            border: 1px solid rgba(179,51,179,0.35) !important;
+        }
+        .signin-modal-content .form-control:focus {
+            background-color: #ffffff !important;
+            border-color: #a01ea7 !important;
+            box-shadow: 0 0 0 4px rgba(179,51,179,0.18) !important;
+        }
+        .signin-modal-content .form-control::placeholder { color: rgba(60,20,60,0.45); }
+        .signin-close-btn { color: #a01ea7 !important; }
+        .signin-close-btn:hover { color: #e81cff !important; }
+
+        /* About contact rectangles: animated gradient border + shimmer sweep */
+        .contact-info-wrap .contact-item {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg,
+                rgba(179,51,179,0.10) 0%,
+                rgba(232,28,255,0.06) 100%) !important;
+            border: 1px solid rgba(179,51,179,0.28) !important;
+            backdrop-filter: blur(6px);
+            animation: contactPulse 4s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        .contact-info-wrap .contact-item::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -120%;
+            width: 60%; height: 100%;
+            background: linear-gradient(115deg,
+                transparent 0%,
+                rgba(255,255,255,0.35) 50%,
+                transparent 100%);
+            transform: skewX(-20deg);
+            animation: contactShine 5s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            pointer-events: none;
+        }
+        .contact-info-wrap .contact-item .contact-icon {
+            transition: transform 0.4s ease, color 0.4s ease;
+        }
+        .contact-info-wrap .contact-item:hover .contact-icon {
+            transform: rotate(-12deg) scale(1.25);
+            color: #e81cff !important;
+        }
+        @keyframes contactPulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(179,51,179,0); }
+            50%      { box-shadow: 0 4px 18px rgba(179,51,179,0.28); }
+        }
+        @keyframes contactShine {
+            0%   { left: -120%; }
+            55%  { left: 130%; }
+            100% { left: 130%; }
+        }
+        @media (max-width: 600px) {
+            .contact-info-wrap .contact-item {
+                font-size: 13px !important;
+                padding: 6px 10px !important;
+                max-width: 100% !important;
+            }
+            .signin-modal-overlay .signin-modal-content.card,
+            .buy-modal-overlay .buy-modal-content.card {
+                padding: 28px 18px !important;
+                min-height: unset !important;
+            }
+        }
+
+        /* Buy Now modal: white + exact same size as Sign In modal */
+        .buy-modal-overlay .buy-modal-content.card {
+            background-color: #ffffff !important;
+            width: 92% !important;
+            max-width: 400px !important;
+            padding: 32px 26px !important;
+            min-height: 450px !important;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .buy-modal-overlay .form-container { background: #ffffff !important; padding: 0 !important; }
+        .buy-modal-overlay .form-container h2 {
+            color: #a01ea7 !important;
+            font-size: 20px !important;
+            margin-bottom: 10px !important;
+        }
+        .buy-modal-overlay lord-icon {
+            width: 38px !important;
+            height: 38px !important;
+            margin: 0 auto 10px !important;
+        }
+        .buy-modal-overlay .form-group,
+        .buy-modal-overlay .input-box { margin-bottom: 10px !important; }
+        .buy-modal-overlay .form-label {
+            color: #6b1f6f !important;
+            font-size: 12px !important;
+            margin-bottom: 4px !important;
+            letter-spacing: 0.4px;
+        }
+        .buy-modal-overlay .form-control,
+        .buy-modal-overlay input.form-control,
+        .buy-modal-overlay select.form-control {
+            background: #f7f0fb !important;
+            color: #1a001a !important;
+            border: 1px solid rgba(179,51,179,0.35) !important;
+            padding: 7px 10px !important;
+            font-size: 12.5px !important;
+            border-radius: 8px !important;
+            height: auto !important;
+            line-height: 1.3 !important;
+            width: 85% !important;
+            max-width: 280px !important;
+            box-sizing: border-box !important;
+            display: block !important;
+            margin: 0 auto !important;
+        }
+        .buy-modal-overlay form { width: 100% !important; box-sizing: border-box !important; text-align: center; }
+        .buy-modal-overlay .input-box,
+        .buy-modal-overlay .form-group { width: 100% !important; box-sizing: border-box !important; padding: 0 !important; text-align: center; }
+        .buy-modal-overlay .form-label { display: block; text-align: left; width: 85%; max-width: 280px; margin-left: auto !important; margin-right: auto !important; }
+
+
+        .buy-modal-overlay .form-control::placeholder { color: rgba(60,20,60,0.45); }
+        .buy-modal-overlay .buy-submit-btn {
+            padding: 9px 22px !important;
+            font-size: 13px !important;
+            border-radius: 8px !important;
+            width: 200px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        .buy-close-btn { color: #a01ea7 !important; top: 6px !important; right: 14px !important; font-size: 22px !important; }
+        @media (max-width: 600px) {
+            .buy-modal-overlay .buy-modal-content.card {
+                padding: 24px 18px !important;
+                min-height: unset !important;
+            }
+        }
+
+
+
+        /* Compact contact info boxes */
+        .contact-item {
+            padding: 6px 12px !important;
+            margin-bottom: 6px !important;
+            font-size: 14px !important;
+            border-radius: 6px !important;
+            max-width: 360px;
+            transition: opacity 0.55s ease, transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                        background 0.3s, border-color 0.3s, box-shadow 0.3s, letter-spacing 0.3s !important;
+        }
+        .contact-item:hover {
+            font-size: 14px !important;
+            padding-left: 16px !important;
+            transform: translateX(6px) scale(1.02);
+            background: rgba(255,255,255,0.28) !important;
+            box-shadow: 0 6px 18px rgba(179,51,179,0.35);
+            letter-spacing: 0.4px;
+        }
+        .contact-icon {
+            font-size: 14px !important;
+            width: 18px !important;
+        }
+
+        /* Instruction image: gentle float + rich hover animation */
+        .instruct-img-wrapper img {
+            transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.5s ease, filter 0.5s ease;
+            will-change: transform;
+            animation: instructFloat 5s ease-in-out infinite;
+        }
+        @keyframes instructFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50%      { transform: translateY(-8px) rotate(-1deg); }
+        }
+        .instruct-img-wrapper img:hover {
+            transform: translateY(-14px) scale(1.06) rotate(2deg);
+            box-shadow: 0 20px 50px rgba(179,51,179,0.55);
+            filter: drop-shadow(0 0 18px rgba(232,28,255,0.55)) saturate(1.15);
+            animation-play-state: paused;
+        }
+
+    </style>
+</head>
+
+<body id="top">
+
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Custom cursor (desktop only) -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="cursor-ring"  id="cursorRing"></div>
+
+    <!-- Ambient background orbs -->
+    <div class="aura-orb aura-orb-1" aria-hidden="true"></div>
+    <div class="aura-orb aura-orb-2" aria-hidden="true"></div>
+    <div class="aura-orb aura-orb-3" aria-hidden="true"></div>
+
+    <!-- ============================
+         NAVBAR
+    ============================= -->
+    <section>
+        <nav class="navbar navbar-expand-lg aura-bg-dark navbar-dark  fixed-top ">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <a class="navbar-brand d-flex align-items-center m-0" href="#">
+                    <img src="images/logo-modified.png" alt="Logo" style="width:40px;" class="rounded-pill">
+                    <span class="ms-2" id="adres">Derma Aura</span>
+                </a>
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home"><i class="fa fa-fw fa-home"></i>Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about-us"><i class="fa fa-fw fa-info-circle"></i>About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#instructions-section"><i class="fa fa-fw fa-cog"></i>Instructions</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fa fa-fw fa-shopping-bag"></i>Products</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#pp"><i class="fa fa-fw fa-tint"></i> Face Cleanser</a></li>
+                                <li><a class="dropdown-item" href="#serum"><i class="fa fa-fw fa-tint"></i> Face Serums</a></li>
+                                <li><a class="dropdown-item" href="#creams"><i class="fa fa-fw fa-tint"></i> Face Creams</a></li>
+                                <li><a class="dropdown-item" href="#sunscreen"><i class="fa fa-fw fa-tint"></i> Face Sunscreen</a></li>
+                                <li><a class="dropdown-item" href="#toner"><i class="fa fa-fw fa-tint"></i> Face Toner</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <label for="signin-toggle" class="btn-outline-light-s" style="cursor:pointer;">Sign In</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <!-- ============================
+         HERO
+    ============================= -->
+    <div class="top-title p-0 m-0" data-aos="fade-down">
+        <img src="images/jojo.png" class="img-top" alt="shopping cart">
+        <h1 class="text-center mt-5 mb-4 aura-text-light" id="home" style="margin-top: 40px; padding-top:40px;">Welcome to Derma Aura</h1>
+        <p class="text-center under-title mb-5 aura-p1">Discover the secret to radiant skin with Derma Aura <br> your ultimate skincare destination.</p>
+    </div>
+
+    <!-- ============================
+         SLIDER
+    ============================= -->
+    <div id="wowslider-container1" data-aos="fade-in">
+        <div class="ws_images"><ul>
+            <li><img src="data1/images/pp.jpg" alt="For a brighter." title="For a brighter." id="wows1_0"/></li>
+            <li><img src="data1/images/p.jpg" alt="smoother complexion" title="smoother complexion" id="wows1_1"/></li>
+            <li><img src="data1/images/1280whcw5ekx3g04.jpg" alt="the secret to beauty begins with Derma." title="the secret to beauty begins with Derma." id="wows1_2"/></li>
+            <li><a href="http://wowslider.net"><img src="data1/images/888.jpg" alt="carousel jquery" title="Join us and enjoy radiant" id="wows1_3"/></a></li>
+            <li><img src="data1/images/l.jpg" alt="glowing skin." title="glowing skin." id="wows1_4"/></li>
+        </ul></div>
+        <div class="ws_bullets"><div>
+            <a href="#" title="For a brighter."><span><img src="data1/tooltips/pp.jpg" alt="For a brighter."/>1</span></a>
+            <a href="#" title="smoother complexion"><span><img src="data1/tooltips/p.jpg" alt="smoother complexion"/>2</span></a>
+            <a href="#" title="the secret to beauty begins with Derma."><span><img src="data1/tooltips/1280whcw5ekx3g04.jpg" alt="Derma"/>3</span></a>
+            <a href="#" title="Join us and enjoy radiant"><span><img src="data1/tooltips/888.jpg" alt="radiant"/>4</span></a>
+            <a href="#" title="glowing skin."><span><img src="data1/tooltips/l.jpg" alt="glowing skin."/>5</span></a>
+        </div></div>
+        <div class="ws_script" style="position:absolute;left:-99%"><a href="http://wowslider.net">carousel jquery</a> by WOWSlider.com v9.0</div>
+        <div class="ws_shadow"></div>
+    </div>
+    <script type="text/javascript" src="engine1/wowslider.js"></script>
+    <script type="text/javascript" src="engine1/script.js"></script>
+
+    <!-- ============================
+         FACE CLEANSERS
+    ============================= -->
+    <section class="container mt-5">
+        <div class="section-heading-wrap mb-4" data-aos="fade-up">
+            <span class="drop-orb drop-orb-1"></span>
+            <h3 class="text-center" id="pp"><b><i> * face cleansers *</i></b></h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/larouchnew.jpg" class="card-img-top" alt="Face Cleanser"></div><img src="images/larouchnew-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>LA ROUCH-POSAY CLEANSER</b></h5>
+                        <p class="card-text aura-p1">A gentle cleanser and exfoliator designed for sensitive, dry, or uneven skin. It relies primarily on soothing and mild exfoliating formulas such as chain acid derivatives that work to soften the skin's texture, remove dead cells, and improve the appearance of rough skin while maintaining its moisture thanks to its hot spring water content.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="60" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>10.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/larouchnew.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Sensitive</span><span class="skin-chip">Dry</span><span class="skin-chip">Uneven</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Apply to damp face, massage gently in circular motions, rinse with lukewarm water.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Use as part of your evening cleansing routine to remove daily buildup and SPF.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">⚠ Avoid contact with eyes. Patch test recommended.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/cetaphilnew.jpg" class="card-img-top" alt="Face Cleanser"></div><img src="images/cetaphilnew-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CETAPHIL CLEANSER</b></h5>
+                        <p class="card-text aura-p1">A gentle, medically developed foaming cleanser specifically for oily and combination skin. It effectively removes dirt, excess oil, and makeup without drying out the skin or stripping it of its natural moisture. Its lightweight formula helps balance sebum production and maintains the skin's natural protective barrier.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>12.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/cetaphilnew.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Oily</span><span class="skin-chip">Combination</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Lather onto wet skin, rinse thoroughly. Follow with a light moisturiser.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Double-cleanse to remove makeup and sunscreen before your PM routine.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💡 Can be used up to twice daily.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/cerave new.jpg" class="card-img-top" alt="Face Cleanser"></div><img src="images/cerave_new-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CERAVE CLEANSER</b></h5>
+                        <p class="card-text aura-p1">This cleanser is specifically formulated for blemish-prone and acne-prone skin. It contains 2% salicylic acid to exfoliate the skin, remove excess oil, and treat pimples. Additionally, it contains oil-absorbing clay to reduce shine and essential ceramides to strengthen the skin barrier and protect it from dryness and irritation.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>15.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/cerave new.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Acne-Prone</span><span class="skin-chip">Oily</span><span class="skin-chip">Blemish</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Work into a lather on wet skin for 30 sec, rinse. Pair with a non-comedogenic SPF.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Use after removing makeup. Follow with CeraVe serum or a ceramide moisturiser.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">⚠ Start 2–3×/week if new to salicylic acid.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         FACE SERUMS
+    ============================= -->
+    <section class="container mt-5">
+        <div class="section-heading-wrap mb-4" data-aos="fade-up">
+            <span class="drop-orb drop-orb-2"></span>
+            <h3 class="text-center" id="serum"><b><i> * face serums *</i></b></h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/larouchser.jpg" class="card-img-top" alt="Face Serum"></div><img src="images/larouchser-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>LA ROUCH-POSAY SERUM</b></h5>
+                        <p class="card-text aura-p1">A concentrated, skin-renewing serum formulated with potent corrective acids, it gently exfoliates to visibly reduce the appearance of imperfections, fine lines, and enlarged pores. It helps rebalance sebum production and stimulates skin cell renewal, leaving skin looking more radiant.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>12.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/larouchser.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Oily</span><span class="skin-chip">Combination</span><span class="skin-chip">Acne-Prone</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Apply 2–3 drops after cleansing. Layer under moisturiser and SPF 50+.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Core PM step — apply before ceramide cream. Expect results in 4–6 weeks.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">⚠ Avoid with retinol on the same night initially.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/xxc.jpg" class="card-img-top" alt="Face Serum"></div><img src="images/xx.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CETAPHIL SERUM</b></h5>
+                        <p class="card-text aura-p1">A hydrating and intensive serum specially formulated for sensitive and very dry skin. It relies on a hydro-synth complex and hyaluronic acid to deeply boost skin hydration levels, leaving it soft and vibrant all day long. Its lightweight, fast-absorbing formula is non-comedogenic, making it ideal for soothing skin irritation.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>15.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/xxc.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Sensitive</span><span class="skin-chip">Very Dry</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Press 3–4 drops onto cleansed face and neck. Seal with moisturiser.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Ideal last step before sleep — lets hyaluronic acid work overnight.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💧 Use on slightly damp skin for maximum hydration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/crave ser.jpg" class="card-img-top" alt="Face Serum"></div><img src="images/crave_ser-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CERAVE SERUM</b></h5>
+                        <p class="card-text aura-p1">An advanced treatment serum that renews the skin's outer surface and combats acne scars and blemishes. It contains encapsulated retinol that gently exfoliates and improves skin texture, along with licorice extract to lighten pigmentation and even out skin tone, enriched with three essential ceramides to prevent dehydration.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>18.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/crave ser.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">All Types</span><span class="skin-chip">Post-Acne</span><span class="skin-chip">Pigmented</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Apply to clean, dry skin. Wait 5 min before SPF. Start every other day.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> PM use only at first — retinol increases sun sensitivity.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">⚠ Not recommended during pregnancy. Always use SPF the next morning.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         FACE CREAMS
+    ============================= -->
+    <section class="container mt-5 mb-5">
+        <div class="section-heading-wrap mb-4" data-aos="fade-up">
+            <span class="drop-orb drop-orb-3"></span>
+            <h3 class="text-center" id="creams"><b><i> * face creams *</i></b></h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/lanew.jpg" class="card-img-top" alt="Face Cream"></div><img src="images/lanew-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>LA ROCHE-POSAY CREAM</b></h5>
+                        <p class="card-text aura-p1">An advanced, oil-based moisturizer specifically formulated for acne-prone and blemish-prone skin, it provides long-lasting hydration with gentle exfoliation that helps unclog pores and reduce the appearance of pimples. Its formula, enriched with thermal spring water, leaves your face feeling completely refreshed.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>20.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/lanew.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Acne-Prone</span><span class="skin-chip">Oily</span><span class="skin-chip">Combination</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Apply a thin layer after serum. Ideal under SPF as final AM step.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Use as your night cream — supports overnight skin renewal.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💡 Oil-free formula — safe to layer under makeup.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/cetaphilcream.jpg" class="card-img-top" alt="Face Cream"></div><img src="images/cetaphilcream-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>Cetaphil CREAM</b></h5>
+                        <p class="card-text aura-p1">This clinically proven treatment cream provides deep and lasting 48-hour hydration. Enriched with nourishing avocado oil and essential vitamins H and E, it instantly soothes dry and sensitive skin. Its lightweight texture absorbs quickly, restoring your skin's natural radiance, giving a silky-smooth texture and a vibrant appearance.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>18.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/cetaphilcream.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Dry</span><span class="skin-chip">Sensitive</span><span class="skin-chip">Normal</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Smooth over face and neck after serum. Top with SPF 30+ before going out.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Apply generously before bed for deep 48-hour hydration.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💧 Safe for daily use, morning and night.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/creavecream.jpg" class="card-img-top" alt="Face Cream"></div><img src="images/creavecream-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CeraVe CREAM</b></h5>
+                        <p class="card-text aura-p1">A rich, fast-absorbing daily cream that deeply repairs and moisturizes your delicate skin. It contains three essential ceramides and pure hyaluronic acid to effectively lock in moisture all day long. 
+                            <br>Ideal for maintaining a strong, firm skin barrier without leaving any sticky or greasy residue.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>22.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/creavecream.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Dry</span><span class="skin-chip">Normal</span><span class="skin-chip">Barrier-Damaged</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Apply after toner/serum as final moisturising step before SPF.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Evening staple — ceramides rebuild the skin barrier while you sleep.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💡 Can double as a hand cream or body moisturiser.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         FACE SUNSCREEN
+    ============================= -->
+    <section class="container mt-5 mb-5">
+        <div class="section-heading-wrap mb-4" data-aos="fade-up">
+            <span class="drop-orb drop-orb-4"></span>
+            <h3 class="text-center" id="sunscreen"><b><i> * face sunscreen *</i></b></h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/---.jpg" class="card-img-top" alt="Face Sunscreen"></div><img src="images/----removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>LA ROCHE-POSAY Sunscreen</b></h5>
+                        <p class="card-text aura-p1">This sunscreen provides maximum and broad-spectrum protection against UV rays. Its ultra-light, non-greasy formula absorbs quickly without leaving any white cast on the skin.<br> It is ideal for daily use and for protecting the face from dryness and pigmentation caused by sun exposure.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>20.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/---.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">All Types</span><span class="skin-chip">Sensitive</span><span class="skin-chip">Daily-Wear</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Apply as last AM step 15 min before sun exposure. Reapply every 2 hrs outdoors.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Not needed at night — skip in PM routine entirely.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">☀ SPF 50+ — essential even on cloudy days.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/cetasun.jpg" class="card-img-top" alt="Face Sunscreen"></div><img src="images/cetasun-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>Cetaphil Sunscreen</b></h5>
+                        <p class="card-text aura-p1">Gentle and effective protection, lightly formulated for sensitive, redness-prone skin. This medical-grade sunscreen has been developed to protect and nourish the skin from within, providing strong defense against harmful UV rays. Its lightweight, water-resistant gel formula leaves your face feeling refreshed without clogging pores.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>18.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/cetasun.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Sensitive</span><span class="skin-chip">Redness-Prone</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Smooth over face 15 min before going outside. Layer over moisturiser.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Not needed in PM. Use your regular moisturiser instead.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💧 Water-resistant — ideal for outdoor activities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/cerasun.jpg" class="card-img-top" alt="Face Sunscreen"></div><img src="images/cerasun-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CeraVe Sunscreen</b></h5>
+                        <p class="card-text aura-p1">This dual-action sunscreen combines high protection with repair of the skin's natural barrier. Thanks to its essential ceramides and hyaluronic acid content, it locks in moisture and prevents damage from surrounding environmental factors. Developed to give you healthy, radiant skin for hours.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>22.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/cerasun.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">All Types</span><span class="skin-chip">Dry</span><span class="skin-chip">Barrier-Sensitive</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Final AM step after all serums and moisturisers. Reapply at midday.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> No PM use needed. Replace with CeraVe Cream in your night routine.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💡 Ceramide-enriched — protects and repairs simultaneously.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         FACE TONER
+    ============================= -->
+    <section class="container mt-5 mb-5">
+        <div class="section-heading-wrap mb-4" data-aos="fade-up">
+            <span class="drop-orb drop-orb-5"></span>
+            <h3 class="text-center" id="toner"><b><i> * face toner *</i></b></h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4" data-aos="fade-up">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/tonerla.jpg" class="card-img-top" alt="Face Toner"></div><img src="images/tonerla-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>LA ROCHE-POSAY Toner</b></h5>
+                        <p class="card-text aura-p1">This toner, specially formulated for combination and acne-prone skin, deeply cleanses the skin, removing excess oil and unwanted shine without drying it out.<br> It helps to refine enlarged pores and prevent the formation of new blackheads and pimples, <br>leaving your face looking clear and radiant all <br>day long.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>20.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/tonerla.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Oily</span><span class="skin-chip">Combination</span><span class="skin-chip">Acne-Prone</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Sweep over face with a cotton pad after cleansing. Follow with serum + SPF.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Use after double-cleansing to remove last traces of impurities before PM actives.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">⚠ Avoid overuse — once or twice daily is enough.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/tonceat.jpg" class="card-img-top" alt="Face Toner"></div><img src="images/tonceat-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>Cetaphil Toner</b></h5>
+                        <p class="card-text aura-p1">A refreshing and advanced liquid that revitalizes dull and tired skin,<br> it is the perfect complement to your daily cleansing routine.<br> It gently removes excess oil and impurities while providing immediate and intense hydration that lasts up to eight hours. Its formula is completely alcohol-free, ensuring skin soothing and protecting it from irritation.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>18.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/tonceat.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">All Types</span><span class="skin-chip">Oily</span><span class="skin-chip">Dull</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> Pat onto cleansed skin with hands or cotton pad. No need to rinse.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> 8-hour hydration boost — great before your PM serum.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💧 Alcohol-free — gentle enough for twice-daily use.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card p-0 h-100">
+                    <a href="https://www.mythrillfiction.com/the-dark-rider" target="_blank">
+                        <div class="card-3d"><div class="wrapper"><img src="images/======.jpg" class="card-img-top" alt="Face Toner"></div><img src="images/______-removebg-preview.png" class="character"/></div>
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title aura-text-light"><b>CeraVe Toner</b></h5>
+                        <p class="card-text aura-p1">This nourishing, fast-absorbing toner is designed to boost your skin's hydration and health after cleansing. <br>Its unique formula, rich in essential ceramides and hyaluronic acid, helps lock in moisture and repair the skin's natural barrier. <br>It gently removes impurities and makeup,<br> leaving your face soft and perfectly prepped.</p>
+                        <img src="images/9-removebg-preview.png" class="discount_tag" alt="discount" width="50" height="50">
+                        <label for="buy-now-toggle" class="btn-c" style="cursor:pointer;"><i class="fa fa-fw fa-shopping-cart"></i>Buy Now</label>
+                        <label class="ui-like"><input type="checkbox"><div class="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill=""><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></svg></div></label>
+                        <span class="hover-text"><b><s>22.0$</s></b></span>
+                    </div>
+                    <button class="drawer-toggle" onclick="toggleDrawer(this)" aria-label="Product info" title="Product guide"></button>
+                    <div class="card-drawer">
+                        <div class="card-drawer-inner">
+                            <div class="d-flex align-items-center gap-3 mb-10" style="margin-bottom:10px;">
+                                <img src="images/======.jpg" alt="product" class="drawer-thumb">
+                                <div>
+                                    <p class="drawer-label">Best For Skin Type</p>
+                                    <div class="drawer-skin-row"><span class="skin-chip">Dry</span><span class="skin-chip">Normal</span><span class="skin-chip">Post-Cleanse</span></div>
+                                </div>
+                            </div>
+                            <hr class="drawer-divider">
+                            <p class="drawer-label">Usage Guide</p>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-sun-o"></i></div>
+                                <div class="timing-text"><b>Morning —</b> After cleansing, pat onto face and neck before serum. Allows actives to absorb better.</div>
+                            </div>
+                            <div class="drawer-timing">
+                                <div class="timing-icon"><i class="fa fa-moon-o"></i></div>
+                                <div class="timing-text"><b>Evening —</b> Use before your ceramide cream — prepares skin for overnight repair.</div>
+                            </div>
+                            <p class="drawer-label" style="margin-top:8px;color:rgba(255,255,255,0.5);font-size:11px;">💡 Preps skin for better absorption of all subsequent products.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         ABOUT US
+    ============================= -->
+    <section class="aura-bg-dark p-4" data-aos="fade-up" id="about-us-section">
+        <div class="container-4">
+            <h2 id="about-us"><b><i><u>about us:</u></i></b></h2>
+            <img src="images/logo-modified.png" alt="Derma Aura Logo" width="300" height="300">
+            <p class="aura-p4">Derma Aura is your ultimate skincare destination, dedicated to providing you with the best products and expert advice for radiant and healthy skin. We believe that everyone deserves to feel confident and beautiful in their own skin, which is why we offer a carefully curated selection of high-quality skincare products that cater to all skin types and concerns.</p>
+
+            <!-- Contact Info Animated -->
+            <div class="contact-info-wrap mt-4">
+                <dl class="contact-dl">
+                    <dd class="aura-p2 mb-2 text-left contact-item" style="--delay:0.1s">
+                        <i class="fa fa-fw fa-envelope contact-icon"></i>jdarwish213@gmail.com
+                    </dd>
+                    <dd class="aura-p2 mb-2 text-left contact-item" style="--delay:0.25s">
+                        <i class="fa fa-fw fa-phone contact-icon"></i> +963 93 996 1366
+                    </dd>
+                    <dd class="aura-p2 mb-2 text-left contact-item" style="--delay:0.4s">
+                        <i class="fa fa-fw fa-map-marker contact-icon"></i> Suwayda-Syria, 5311
+                    </dd>
+                    <dd class="aura-p2 mb-2 text-left contact-item" style="--delay:0.55s">
+                        <i class="fa fa-fw fa-instagram contact-icon"></i>Instagram
+                    </dd>
+                    <dd class="aura-p2 mb-2 text-left contact-item" style="--delay:0.7s">
+                        <i class="fa fa-fw fa-facebook contact-icon"></i> Facebook
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================
+         CONTACT / MAP
+    ============================= -->
+    <section class="mt-5 mb-5" data-aos="fade-up">
+        <div class="container-fluid px-3 px-md-4">
+            <div class="map-wrapper">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3354562.295186724!2d37.98028309531249!3d34.80745785053731!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1778486423370!5m2!1sen!2s"
+                    id="map-iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <img src="images/o-removebg-preview-removebg-preview.png" alt="map location" class="line-image-5 map-pin">
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         ====  INSTRUCTIONS SECTION (EMBEDDED)  ====
+    ================================================= -->
+    <div class="instructions-divider"></div>
+
+    <section id="instructions-section" style="background: #fdf4ff; padding: 30px 0 0 0;">
+
+        <!-- Full-width heading -->
+        <div class="container-fluid px-0" data-aos="fade-down">
+            <h1 class="instruction-8">Instructions</h1>
+        </div>
+
+        <!-- Skin type cards - full width -->
+        <div class="container-fluid px-3 px-md-5 mt-4" data-aos="fade-up" id="skin_types">
+            <div class="skin-cards-wrapper">
+                <div class="skin-card skin-c1">
+                    <p class="tip">NORMAL</p>
+                    <p class="second-text">Balanced Skin</p>
+                </div>
+                <div class="skin-card skin-c2">
+                    <p class="tip">SENSITIVE</p>
+                    <p class="second-text">Easily Irritated</p>
+                </div>
+                <div class="skin-card skin-c3">
+                    <p class="tip">OIL</p>
+                    <p class="second-text">Shiny and Porous</p>
+                </div>
+                <div class="skin-card skin-c4">
+                    <p class="tip">DRY</p>
+                    <p class="second-text">Tight and Flaky</p>
+                </div>
+                <div class="skin-card skin-c5">
+                    <p class="tip">COMBINATION</p>
+                    <p class="second-text">Dual Nature</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruction image -->
+        <div class="instruct-img-wrapper" data-aos="zoom-in">
+            <img src="images/qq-removebg-preview.png" alt="Skincare guide illustration">
+        </div>
+
+        <!-- Steps -->
+        <div class="container-fluid px-3 px-md-5 pb-4" data-aos="fade-up" id="ul">
+            <div class="d-flex justify-content-center">
+                <ul class="instruct-steps">
+                    <li><b>After determining your skin type, you should follow these steps to achieve results:</b></li>
+                    <li>1. <b>Cleanse:</b> Wash your skin thoroughly with a cleanser suitable for your skin type before applying any product.</li>
+                    <li>2. <b>Apply:</b> Gently distribute the product in circular motions from the bottom up until it is completely absorbed.</li>
+                    <li>3. <b>Confirm:</b> Your commitment to using a moisturizer at night and sunscreen during the day, and consult a dermatologist to ensure the product is suitable for your skin.</li>
+                </ul>
+            </div>
+        </div>
+
+       
+    </section>
+
+    <!-- ============================
+         SCROLL TO TOP
+    ============================= -->
+    <a href="#top" id="scrollToTopBtn" title="Return to Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M12 4l-8 8h6v8h4v-8h6z" fill="currentColor"/>
+        </svg>
+    </a>
+
+    <!-- ============================
+         MAIN FOOTER
+    ============================= -->
+    <footer class="footer-main">
+
+        <!-- Newsletter Strip -->
+        <div class="footer-newsletter">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div>
+                        <h5>Stay Glowing — Join Our Newsletter</h5>
+                        <p>Get skincare tips, exclusive deals & new arrivals straight to your inbox.</p>
+                    </div>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email address">
+                        <button type="button" onclick="alert('Thank you for subscribing!')">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated Particles -->
+        <div class="footer-particles" aria-hidden="true">
+            <span class="fp fp1">✦</span>
+            <span class="fp fp2">✦</span>
+            <span class="fp fp3">✦</span>
+            <span class="fp fp4">✦</span>
+            <span class="fp fp5">✦</span>
+            <span class="fp fp6">✦</span>
+            <span class="fp fp7">◇</span>
+            <span class="fp fp8">◇</span>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="container footer-grid">
+            <div class="row g-4 align-items-center justify-content-center">
+
+                <!-- Brand Column -->
+                <div class="col-lg-4 col-md-6 text-center text-lg-start">
+                    <img src="images/logo-modified.png" alt="Derma Aura Logo" class="footer-brand-logo">
+                    <p class="footer-brand-name">Derma Aura</p>
+                    <p class="footer-brand-desc">Your ultimate skincare destination, dedicated to radiant, healthy skin for every skin type.</p>
+                    <div class="footer-rating justify-content-center justify-content-lg-start">
+                        <span class="stars">★★★★★</span>
+                        <span>5.0 · Trusted by thousands</span>
+                    </div>
+                </div>
+
+                <!-- Brands -->
+                <div class="col-lg-4 col-md-6 text-center">
+                    <p class="footer-col-title text-center" style="display:inline-block;">Our Brands</p>
+                    <div class="footer-products-grid">
+                        <span class="footer-product-tag">La Roche-Posay</span>
+                        <span class="footer-product-tag">Cetaphil</span>
+                        <span class="footer-product-tag">CeraVe</span>
+                    </div>
+                    <div class="footer-badges" style="margin-top:14px; justify-content:center;">
+                        <span class="footer-badge"><i class="fa fa-certificate"></i> Clinically Tested</span>
+                        <span class="footer-badge"><i class="fa fa-globe"></i> Global Brands</span>
+                    </div>
+                </div>
+
+                <!-- Socials Column -->
+                <div class="col-lg-4 col-md-12 text-center">
+                    <p class="footer-col-title" style="display:inline-block;">Follow Us</p>
+                    <div class="footer-socials-wrap">
+                        <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="footer-social-animated" title="Instagram">
+                            <span class="fsa-glow"></span>
+                            <i class="fa fa-instagram"></i>
+                            <span class="fsa-label">Instagram</span>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="footer-social-animated" title="Facebook">
+                            <span class="fsa-glow"></span>
+                            <i class="fa fa-facebook"></i>
+                            <span class="fsa-label">Facebook</span>
+                        </a>
+                        <a href="https://t.me/" target="_blank" rel="noopener" class="footer-social-animated" title="Telegram">
+                            <span class="fsa-glow"></span>
+                            <i class="fa fa-telegram"></i>
+                            <span class="fsa-label">Telegram</span>
+                        </a>
+                        <a href="https://www.tiktok.com/" target="_blank" rel="noopener" class="footer-social-animated" title="TikTok">
+                            <span class="fsa-glow"></span>
+                            <i class="fa fa-music"></i>
+                            <span class="fsa-label">TikTok</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <hr class="footer-divider">
+
+        <!-- Bottom Bar -->
+        <div class="container footer-bottom">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <p class="footer-copy">© 2026 <span>Derma Aura</span>. All rights reserved. Made with <span>♥</span> for glowing skin.</p>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- ============================
+         SIGN IN MODAL
+    ============================= -->
+    <input type="checkbox" id="signin-toggle" class="signin-checkbox">
+    <div class="signin-modal-overlay">
+        <div class="signin-modal-content card">
+            <label for="signin-toggle" class="signin-close-btn">&times;</label>
+            <div class="form-container" style="width:100%;">
+                <h2 class="text-center mb-4 heading" style="color:#070303;">Sign In to Derma Aura</h2>
+                <form onsubmit="event.preventDefault(); alert('Logged in successfully!');">
+                    <div class="input-box mb-3 form-group">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="input-box mb-3 form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <input type="image" src="images/send.png" alt="Submit" width="200" height="200">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================
+         BUY NOW MODAL
+    ============================= -->
+    <input type="checkbox" id="buy-now-toggle" class="buy-checkbox" style="display:none;">
+    <div class="buy-modal-overlay">
+        <div class="buy-modal-content card">
+            <label for="buy-now-toggle" class="buy-close-btn">&times;</label>
+            <div class="form-container" style="width:100%; background:#000000;">
+                <h2 class="text-center mb-4" style="color:#e81cff; font-family:'Charm',cursive;">Confirm Your Order</h2>
+                <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                <lord-icon src="https://cdn.lordicon.com/uisoczqi.json" trigger="loop" delay="2000"
+                    colors="primary:#e5d1fa,secondary:#a866ee" style="width:50px;height:50px;display:block;margin:0 auto 16px;"></lord-icon>
+                <form onsubmit="event.preventDefault(); alert('Thank you! Your order has been placed successfully.');">
+                    <div class="input-box mb-3 form-group">
+                        <label class="form-label" style="color:#e81cff;">Full Name</label>
+                        <input type="text" class="form-control" id="buyer-name" name="name" placeholder="Enter your full name" required
+                            style="background:#121212;border:1px solid #333;color:#fff;border-radius:10px;padding:12px 16px;">
+                    </div>
+                    <div class="input-box mb-3 form-group">
+                        <label class="form-label" style="color:#e81cff;">Phone Number</label>
+                        <input type="tel" class="form-control" id="buyer-phone" name="phone" placeholder="05xxxxxxxx" required
+                            style="background:#121212;border:1px solid #333;color:#fff;border-radius:10px;padding:12px 16px;">
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label class="form-label" style="color:#e81cff;">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" required min="1" max="20"
+                            style="background:#121212;border:1px solid #333;color:#fff;border-radius:10px;padding:12px 16px;">
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label class="form-label" style="color:#e81cff;">Payment Method</label>
+                        <select class="form-control" id="paymentMethod" name="paymentMethod" required
+                            style="background:#121212;color:#fff;border:1px solid #333;border-radius:10px;padding:12px 16px;">
+                            <option value="" disabled selected>Select Payment Method</option>
+                            <option value="creditCard">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bankTransfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="buy-submit-btn">
+                            <i class="fa fa-shopping-cart"></i> Confirm Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================
+         WISHLIST FAB BUTTON
+    ============================= -->
+    <button id="wishlist-fab" onclick="toggleWishlistPanel()" aria-label="Wishlist">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"/></svg>
+        <span id="wishlist-count"></span>
+    </button>
+
+    <!-- ============================
+         WISHLIST PANEL
+    ============================= -->
+    <div id="wishlist-panel">
+        <div class="wishlist-header">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"/></svg>
+                My Wishlist
+            </h4>
+            <button class="wishlist-close-btn" onclick="toggleWishlistPanel()" aria-label="Close wishlist">✕</button>
+        </div>
+        <div id="wishlist-items">
+            <div class="wishlist-empty" id="wishlist-empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"/></svg>
+                No favourites yet — tap ❤ on any product!
+            </div>
+        </div>
+        <div class="wishlist-footer">
+            <button class="wishlist-clear-btn" onclick="clearWishlist()">
+                <i class="fa fa-trash-o"></i> Clear All Favourites
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================
+         SCRIPTS
+    ============================= -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 900, once: true, easing: 'ease-in-out' });
+
+        // Animate contact items on scroll
+        const contactObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('contact-visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.contact-item').forEach(el => {
+            contactObserver.observe(el);
+        });
+
+        // Animate instruction steps on scroll
+        const stepObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const steps = entry.target.querySelectorAll('.instruct-steps li');
+                    steps.forEach((li, i) => {
+                        setTimeout(() => li.classList.add('step-visible'), i * 180);
+                    });
+                }
+            });
+        }, { threshold: 0.15 });
+
+        const ulSection = document.getElementById('ul');
+        if (ulSection) stepObserver.observe(ulSection);
+    </script>
+
+    <!-- ============================
+         DRAWER JS
+    ============================= -->
+    <script>
+    function toggleDrawer(btn) {
+        var card   = btn.closest('.card');
+        var drawer = card.querySelector('.card-drawer');
+        var isOpen = drawer.classList.contains('open');
+
+        // Close any other open drawers first
+        document.querySelectorAll('.card-drawer.open').forEach(function(d) {
+            d.classList.remove('open');
+            var b = d.closest('.card').querySelector('.drawer-toggle');
+            if (b) b.classList.remove('open');
+        });
+
+        if (!isOpen) {
+            drawer.classList.add('open');
+            btn.classList.add('open');
+            // Scroll card into view smoothly on mobile
+            setTimeout(function() {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 120);
+        }
+    }
+    // Close drawer when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.card')) {
+            document.querySelectorAll('.card-drawer.open').forEach(function(d) {
+                d.classList.remove('open');
+                var b = d.closest('.card').querySelector('.drawer-toggle');
+                if (b) b.classList.remove('open');
+            });
+        }
+    });
+    </script>
+
+
+    <script>
+    (function() {
+
+        /* --- Scroll progress bar --- */
+        const progressBar = document.getElementById('scroll-progress');
+        function updateProgress() {
+            const scrollTop  = window.scrollY || document.documentElement.scrollTop;
+            const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+            const pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            if (progressBar) progressBar.style.width = pct + '%';
+        }
+        window.addEventListener('scroll', updateProgress, { passive: true });
+
+        /* --- Custom cursor (desktop only) --- */
+        const glow = document.getElementById('cursorGlow');
+        const ring = document.getElementById('cursorRing');
+        let mx = -100, my = -100, rx = -100, ry = -100;
+        document.addEventListener('mousemove', function(e) {
+            mx = e.clientX; my = e.clientY;
+            if (glow) { glow.style.left = mx + 'px'; glow.style.top = my + 'px'; }
+        }, { passive: true });
+        /* ring follows with lag */
+        function animRing() {
+            rx += (mx - rx) * 0.14;
+            ry += (my - ry) * 0.14;
+            if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; }
+            requestAnimationFrame(animRing);
+        }
+        animRing();
+        /* enlarge ring on interactive elements */
+        document.querySelectorAll('a, button, label[for], .btn-c, .footer-social-animated').forEach(function(el) {
+            el.addEventListener('mouseenter', function() {
+                if (ring) { ring.style.width = '60px'; ring.style.height = '60px'; ring.style.borderColor = 'rgba(232,28,255,0.6)'; }
+                if (glow) { glow.style.width = '28px'; glow.style.height = '28px'; }
+            });
+            el.addEventListener('mouseleave', function() {
+                if (ring) { ring.style.width = '38px'; ring.style.height = '38px'; ring.style.borderColor = 'rgba(232,28,255,0.35)'; }
+                if (glow) { glow.style.width = '18px'; glow.style.height = '18px'; }
+            });
+        });
+
+        /* --- Card scroll-reveal --- */
+        var cards = document.querySelectorAll('.card');
+        cards.forEach(function(c) { c.classList.add('card-reveal'); });
+        var revealObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry, i) {
+                if (entry.isIntersecting) {
+                    setTimeout(function() {
+                        entry.target.classList.add('revealed');
+                    }, 80);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        cards.forEach(function(c) { revealObserver.observe(c); });
+
+        /* --- Section heading shimmer on scroll into view --- */
+        var headings = document.querySelectorAll('#pp, #serum, #creams, #sunscreen, #toner');
+        var headingObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('shimmer-heading');
+                }
+            });
+        }, { threshold: 0.5 });
+        headings.forEach(function(h) { headingObserver.observe(h); });
+
+        /* --- Staggered card entrance delay within each section --- */
+        document.querySelectorAll('.row').forEach(function(row) {
+            var rowCards = row.querySelectorAll('.card-reveal');
+            rowCards.forEach(function(card, idx) {
+                card.style.transitionDelay = (idx * 0.1) + 's';
+            });
+        });
+
+    })();
+    </script>
+
+    <!-- ============================
+         WISHLIST JS
+    ============================= -->
+    <script>
+    (function() {
+
+        /* ---- State ---- */
+        var wishlist = []; // [{id, name, img, section}]
+
+        /* ---- Toggle panel ---- */
+        window.toggleWishlistPanel = function() {
+            var panel = document.getElementById('wishlist-panel');
+            panel.classList.toggle('open');
+        };
+
+        /* ---- Clear all ---- */
+        window.clearWishlist = function() {
+            wishlist = [];
+            renderWishlist();
+            // Uncheck all hearts
+            document.querySelectorAll('.ui-like input[type=checkbox]').forEach(function(cb) {
+                cb.checked = false;
+            });
+        };
+
+        /* ---- Remove single item ---- */
+        window.removeWishlistItem = function(id) {
+            var el = document.querySelector('.wishlist-item[data-id="' + id + '"]');
+            if (el) {
+                el.classList.add('removing');
+                setTimeout(function() {
+                    wishlist = wishlist.filter(function(p) { return p.id !== id; });
+                    renderWishlist();
+                    // Uncheck corresponding heart
+                    var cb = document.querySelector('.ui-like input[data-wish-id="' + id + '"]');
+                    if (cb) cb.checked = false;
+                }, 340);
+            }
+        };
+
+        /* ---- Render wishlist panel ---- */
+        function renderWishlist() {
+            var container = document.getElementById('wishlist-items');
+            var emptyState = document.getElementById('wishlist-empty-state');
+            var countEl    = document.getElementById('wishlist-count');
+
+            // Update badge
+            if (wishlist.length > 0) {
+                countEl.textContent = wishlist.length;
+                countEl.classList.add('visible');
+            } else {
+                countEl.classList.remove('visible');
+            }
+
+            // Clear existing items (keep empty state element)
+            container.querySelectorAll('.wishlist-item').forEach(function(el) { el.remove(); });
+
+            if (wishlist.length === 0) {
+                emptyState.style.display = '';
+                return;
+            }
+            emptyState.style.display = 'none';
+
+            wishlist.forEach(function(product) {
+                var item = document.createElement('div');
+                item.className = 'wishlist-item';
+                item.setAttribute('data-id', product.id);
+                item.innerHTML =
+                    '<img src="' + product.img + '" alt="' + product.name + '" onerror="this.style.display=\'none\'">' +
+                    '<div class="wishlist-item-info">' +
+                        '<p class="wishlist-item-name">' + product.name + '</p>' +
+                        '<span class="wishlist-item-section">' + product.section + '</span>' +
+                    '</div>' +
+                    '<button class="wishlist-remove-btn" onclick="removeWishlistItem(\'' + product.id + '\')" aria-label="Remove">✕</button>';
+                container.appendChild(item);
+            });
+        }
+
+        /* ---- Floating heart particles ---- */
+        function spawnHearts(x, y) {
+            var hearts = ['❤', '💜', '✨'];
+            for (var i = 0; i < 5; i++) {
+                (function(idx) {
+                    setTimeout(function() {
+                        var p = document.createElement('span');
+                        p.className = 'heart-particle';
+                        p.textContent = hearts[idx % hearts.length];
+                        var offX = (Math.random() - 0.5) * 60;
+                        p.style.left = (x + offX) + 'px';
+                        p.style.top  = y + 'px';
+                        p.style.animationDuration = (0.7 + Math.random() * 0.4) + 's';
+                        document.body.appendChild(p);
+                        setTimeout(function() { p.remove(); }, 1200);
+                    }, idx * 80);
+                })(i);
+            }
+        }
+
+        /* ---- Wire up all heart checkboxes ---- */
+        function wireHearts() {
+            document.querySelectorAll('.ui-like').forEach(function(uiLike, idx) {
+                var cb   = uiLike.querySelector('input[type=checkbox]');
+                var card = uiLike.closest('.card');
+                if (!cb || !card) return;
+
+                // Build product info
+                var nameEl  = card.querySelector('.card-title');
+                var imgEl   = card.querySelector('.card-img-top') || card.querySelector('.drawer-thumb');
+                var sectionEl = card.closest('section');
+                var headingEl = sectionEl ? sectionEl.querySelector('h3') : null;
+
+                var productName    = nameEl    ? nameEl.textContent.trim()    : 'Product ' + (idx + 1);
+                var productImg     = imgEl     ? imgEl.getAttribute('src')    : '';
+                var productSection = headingEl ? headingEl.textContent.trim() : 'Skincare';
+                var productId      = 'product-' + idx;
+
+                // Tag the checkbox with its id for reverse-lookup
+                cb.setAttribute('data-wish-id', productId);
+
+                cb.addEventListener('change', function(e) {
+                    var rect = uiLike.getBoundingClientRect();
+                    var cx = rect.left + rect.width / 2;
+                    var cy = rect.top  + rect.height / 2;
+
+                    if (cb.checked) {
+                        // Add to wishlist
+                        var alreadyIn = wishlist.some(function(p) { return p.id === productId; });
+                        if (!alreadyIn) {
+                            wishlist.push({ id: productId, name: productName, img: productImg, section: productSection });
+                        }
+                        spawnHearts(cx, cy);
+                        renderWishlist();
+                        // Briefly open the panel so user sees the item was added
+                        var panel = document.getElementById('wishlist-panel');
+                        if (!panel.classList.contains('open')) {
+                            panel.classList.add('open');
+                            setTimeout(function() { panel.classList.remove('open'); }, 2200);
+                        }
+                    } else {
+                        // Remove from wishlist
+                        wishlist = wishlist.filter(function(p) { return p.id !== productId; });
+                        renderWishlist();
+                    }
+                });
+            });
+        }
+
+        /* Close panel when clicking outside */
+        document.addEventListener('click', function(e) {
+            var panel = document.getElementById('wishlist-panel');
+            var fab   = document.getElementById('wishlist-fab');
+            if (panel && panel.classList.contains('open') &&
+                !panel.contains(e.target) && !fab.contains(e.target)) {
+                panel.classList.remove('open');
+            }
+        });
+
+        /* Init */
+        wireHearts();
+        renderWishlist();
+
+    })();
+    </script>
+
+</body>
+</html>
